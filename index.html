@@ -294,6 +294,7 @@
   </section>
 
   <!-- end service section -->
+  
 
 
   <!-- Us section -->
@@ -363,7 +364,86 @@
   </section>
 
   <!-- end us section -->
+ <!-- price calculator section -->
+ <section class="calculator_section layout_padding">
+     <div class="container">
+         <div class="heading_container">
+             <h2>
+                 Calculate Your Membership
+             </h2>
+         </div>
+         <div class="calculator_container">
+             <div class="row">
+                 <div class="col-md-6">
+                     <form id="gymCalculator">
+                         <div class="form-group">
+                             <label for="membershipType">Membership Type:</label>
+                             <select class="form-control" id="membershipType" required>
+                                 <option value="" disabled selected>Select membership type</option>
+                                 <option value="100">Single Visit - $10</option>
+                                 <option value="500">Monthly (Basic) - $50</option>
+                                 <option value="900">Monthly (Premium) - $90</option>
+                                 <option value="2500">Yearly (Basic) - $250</option>
+                                 <option value="4500">Yearly (Premium) - $450</option>
+                             </select>
+                         </div>
 
+                         <div class="form-group">
+                             <label for="trainingType">Personal Training:</label>
+                             <select class="form-control" id="trainingType">
+                                 <option value="0">No personal training</option>
+                                 <option value="300">5 sessions - $30/month</option>
+                                 <option value="500">10 sessions - $50/month</option>
+                                 <option value="800">Unlimited - $80/month</option>
+                             </select>
+                         </div>
+
+                         <div class="form-check">
+                             <input class="form-check-input" type="checkbox" id="lockerRental" value="50">
+                             <label class="form-check-label" for="lockerRental">
+                                 Locker rental - $5/month
+                             </label>
+                         </div>
+
+                         <div class="form-check">
+                             <input class="form-check-input" type="checkbox" id="towelService" value="30">
+                             <label class="form-check-label" for="towelService">
+                                 Towel service - $3/month
+                             </label>
+                         </div>
+
+                         <div class="form-group mt-4">
+                             <label for="months">Number of Months (for monthly plans):</label>
+                             <input type="number" class="form-control" id="months" min="1" max="12" value="1">
+                         </div>
+
+                         <button type="button" class="btn btn-primary mt-3" onclick="calculateTotal()">
+                             Calculate Total
+                         </button>
+                     </form>
+                 </div>
+
+                 <div class="col-md-6">
+                     <div class="result_box">
+                         <h4>Your Membership Details</h4>
+                         <div class="result_display">
+                             <p id="membershipDetail">Membership: Not selected</p>
+                             <p id="trainingDetail">Personal Training: None</p>
+                             <p id="extrasDetail">Additional Services: None</p>
+                             <hr>
+                             <h3 id="totalPrice">Total: $0</h3>
+                             <p id="priceNote" class="text-muted"></p>
+                         </div>
+                         <button type="button" class="btn btn-success mt-3" id="proceedBtn" style="display:none;" onclick="proceedToPayment()">
+                             Proceed to Payment
+                         </button>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section>
+ <!-- end price calculator section -->
 
   <!-- client section -->
 
@@ -465,6 +545,7 @@
   </section>
 
   <!-- end client section -->
+  
 
   <!-- result section -->
 
@@ -761,6 +842,140 @@
         .classList.toggle("menu_btn-style");
     }
   </script>
+  <script>
+    // Функция расчета общей стоимости
+    function calculateTotal() {
+        // Получаем значения из формы
+        const membershipType = document.getElementById('membershipType');
+        const trainingType = document.getElementById('trainingType');
+        const lockerRental = document.getElementById('lockerRental');
+        const towelService = document.getElementById('towelService');
+        const months = document.getElementById('months');
+
+        // Проверяем, выбран ли тип членства
+        if (!membershipType.value) {
+            alert('Please select a membership type first!');
+            membershipType.focus();
+            return;
+        }
+
+        // Базовые стоимости
+        let basePrice = parseInt(membershipType.value);
+        let trainingPrice = parseInt(trainingType.value);
+        let extrasPrice = 0;
+
+        // Собираем детали для отображения
+        let membershipText = membershipType.options[membershipType.selectedIndex].text;
+        let trainingText = trainingType.options[trainingType.selectedIndex].text;
+        let extrasText = [];
+
+        // Проверяем дополнительные услуги
+        if (lockerRental.checked) {
+            extrasPrice += parseInt(lockerRental.value);
+            extrasText.push('Locker rental');
+        }
+
+        if (towelService.checked) {
+            extrasPrice += parseInt(towelService.value);
+            extrasText.push('Towel service');
+        }
+
+        // Определяем тип плана (единоразовый или подписка)
+        const membershipValue = membershipType.value;
+        let isSubscription = true;
+        let monthsCount = 1;
+
+        // Single visit - единоразовый платеж
+        if (membershipValue === '100') {
+            isSubscription = false;
+            trainingPrice = 0; // Персональные тренировки не включены в разовый визит
+            extrasPrice = 0; // Доп услуги не включены в разовый визит
+        } else {
+            monthsCount = parseInt(months.value) || 1;
+        }
+
+        // Рассчитываем общую стоимость
+        let totalPrice;
+        let priceNote = '';
+
+        if (isSubscription) {
+            // Для подписок: (базовая цена + тренировки + доп услуги) * количество месяцев
+            totalPrice = (basePrice + trainingPrice + extrasPrice) * monthsCount;
+
+            // Форматируем отображение
+            if (monthsCount > 1) {
+                const monthlyPrice = basePrice + trainingPrice + extrasPrice;
+                priceNote = `($${monthlyPrice} × ${monthsCount} months)`;
+            }
+        } else {
+            // Для разового визита: только базовая цена
+            totalPrice = basePrice;
+            monthsCount = 1;
+        }
+
+        // Обновляем детали на странице
+        document.getElementById('membershipDetail').textContent = `Membership: ${membershipText}`;
+        document.getElementById('trainingDetail').textContent = `Personal Training: ${trainingText}`;
+
+        if (extrasText.length > 0) {
+            document.getElementById('extrasDetail').textContent = `Additional Services: ${extrasText.join(', ')}`;
+        } else {
+            document.getElementById('extrasDetail').textContent = `Additional Services: None`;
+        }
+
+        // Отображаем итоговую цену
+        document.getElementById('totalPrice').textContent = `Total: $${totalPrice}`;
+        document.getElementById('priceNote').textContent = priceNote;
+
+        // Показываем кнопку для оплаты
+        document.getElementById('proceedBtn').style.display = 'block';
+
+        // Прокручиваем к результатам
+        document.querySelector('.result_box').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Функция для перехода к оплате
+    function proceedToPayment() {
+        const totalElement = document.getElementById('totalPrice');
+        const totalText = totalElement.textContent;
+        const totalAmount = totalText.match(/\$(\d+)/)[1];
+
+        // Здесь можно добавить интеграцию с платежной системой
+        // Пока что просто покажем alert с деталями
+        alert(`Thank you for your order!\n\nTotal amount: $${totalAmount}\n\nYou will be redirected to the payment page.`);
+
+        // В реальном проекте здесь будет редирект на страницу оплаты
+        // window.location.href = `/payment?amount=${totalAmount}`;
+    }
+
+    // Автоматический пересчет при изменении значений
+    document.addEventListener('DOMContentLoaded', function () {
+        // Добавляем обработчики событий для автоматического пересчета
+        const inputs = ['membershipType', 'trainingType', 'lockerRental', 'towelService', 'months'];
+
+        inputs.forEach(inputId => {
+            const element = document.getElementById(inputId);
+            if (element) {
+                element.addEventListener('change', function () {
+                    // Пересчитываем только если уже была нажата кнопка расчета
+                    if (document.getElementById('proceedBtn').style.display === 'block') {
+                        calculateTotal();
+                    }
+                });
+            }
+        });
+
+        // Скрываем поле месяцев для разового посещения
+        document.getElementById('membershipType').addEventListener('change', function () {
+            const monthsField = document.getElementById('months').parentElement;
+            if (this.value === '100') {
+                monthsField.style.display = 'none';
+            } else {
+                monthsField.style.display = 'block';
+            }
+        });
+    });
+</script>
 </body>
 
 </html>
