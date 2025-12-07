@@ -938,7 +938,7 @@
     function proceedToPayment() {
         const totalElement = document.getElementById('totalPrice');
         const totalText = totalElement.textContent;
-        const totalAmount = totalText.match(/\$(\d+)/)[1];
+        const totalAmount = totalText.match(/\(\d+)/)[1];
 
         // Здесь можно добавить интеграцию с платежной системой
         // Пока что просто покажем alert с деталями
