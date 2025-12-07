@@ -905,7 +905,7 @@
             // Форматируем отображение
             if (monthsCount > 1) {
                 const monthlyPrice = basePrice + trainingPrice + extrasPrice;
-                priceNote = `($${monthlyPrice} × ${monthsCount} months)`;
+                priceNote = `(${monthlyPrice} руб × ${monthsCount} месяцев)`;
             }
         } else {
             // Для разового визита: только базовая цена
@@ -914,17 +914,17 @@
         }
 
         // Обновляем детали на странице
-        document.getElementById('membershipDetail').textContent = `Membership: ${membershipText}`;
-        document.getElementById('trainingDetail').textContent = `Personal Training: ${trainingText}`;
+        document.getElementById('membershipDetail').textContent = `Абомнимент: ${membershipText}`;
+        document.getElementById('trainingDetail').textContent = `персональные тренировки: ${trainingText}`;
 
         if (extrasText.length > 0) {
-            document.getElementById('extrasDetail').textContent = `Additional Services: ${extrasText.join(', ')}`;
+            document.getElementById('extrasDetail').textContent = `Дополнительные услуги: ${extrasText.join(', ')}`;
         } else {
-            document.getElementById('extrasDetail').textContent = `Additional Services: None`;
+            document.getElementById('extrasDetail').textContent = `Дополнительные услуги: не выбраны`;
         }
 
         // Отображаем итоговую цену
-        document.getElementById('totalPrice').textContent = `Total: $${totalPrice}`;
+        document.getElementById('totalPrice').textContent = `Итого: ${totalPrice} руб `;
         document.getElementById('priceNote').textContent = priceNote;
 
         // Показываем кнопку для оплаты
