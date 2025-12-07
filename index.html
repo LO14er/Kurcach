@@ -854,7 +854,7 @@
 
         // Проверяем, выбран ли тип членства
         if (!membershipType.value) {
-            alert('Please select a membership type first!');
+            alert('Сначала выберете абонимент!');
             membershipType.focus();
             return;
         }
@@ -905,7 +905,7 @@
             // Форматируем отображение
             if (monthsCount > 1) {
                 const monthlyPrice = basePrice + trainingPrice + extrasPrice;
-                priceNote = `(${monthlyPrice} руб × ${monthsCount} месяцев)`;
+                priceNote = `(${monthlyPrice}руб × ${monthsCount} months)`;
             }
         } else {
             // Для разового визита: только базовая цена
