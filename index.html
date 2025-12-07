@@ -843,7 +843,6 @@
     }
   </script>
   <script>
-    // Функция расчета общей стоимости
     function calculateTotal() {
         // Получаем значения из формы
         const membershipType = document.getElementById('membershipType');
@@ -854,7 +853,7 @@
 
         // Проверяем, выбран ли тип членства
         if (!membershipType.value) {
-            alert('Сначала выберете абонимент!');
+            alert('Сначала выберите абонемент!');
             membershipType.focus();
             return;
         }
@@ -872,24 +871,24 @@
         // Проверяем дополнительные услуги
         if (lockerRental.checked) {
             extrasPrice += parseInt(lockerRental.value);
-            extrasText.push('Locker rental');
+            extrasText.push('Аренда шкафчика');
         }
 
         if (towelService.checked) {
             extrasPrice += parseInt(towelService.value);
-            extrasText.push('Towel service');
+            extrasText.push('Полотенце');
         }
 
-        // Определяем тип плана (единоразовый или подписка)
+        // Определяем тип плана
         const membershipValue = membershipType.value;
         let isSubscription = true;
         let monthsCount = 1;
 
-        // Single visit - единоразовый платеж
+        // Разовое посещение
         if (membershipValue === '100') {
             isSubscription = false;
-            trainingPrice = 0; // Персональные тренировки не включены в разовый визит
-            extrasPrice = 0; // Доп услуги не включены в разовый визит
+            trainingPrice = 0;
+            extrasPrice = 0;
         } else {
             monthsCount = parseInt(months.value) || 1;
         }
@@ -899,32 +898,29 @@
         let priceNote = '';
 
         if (isSubscription) {
-            // Для подписок: (базовая цена + тренировки + доп услуги) * количество месяцев
             totalPrice = (basePrice + trainingPrice + extrasPrice) * monthsCount;
 
-            // Форматируем отображение
             if (monthsCount > 1) {
                 const monthlyPrice = basePrice + trainingPrice + extrasPrice;
-                priceNote = `(${monthlyPrice}руб × ${monthsCount} months)`;
+                priceNote = `(${monthlyPrice} руб × ${monthsCount} месяцев)`;
             }
         } else {
-            // Для разового визита: только базовая цена
             totalPrice = basePrice;
             monthsCount = 1;
         }
 
         // Обновляем детали на странице
-        document.getElementById('membershipDetail').textContent = `Абомнимент: ${membershipText}`;
-        document.getElementById('trainingDetail').textContent = `персональные тренировки: ${trainingText}`;
+        document.getElementById('membershipDetail').textContent = `Абонемент: ${membershipText}`;
+        document.getElementById('trainingDetail').textContent = `Персональные тренировки: ${trainingText}`;
 
         if (extrasText.length > 0) {
             document.getElementById('extrasDetail').textContent = `Дополнительные услуги: ${extrasText.join(', ')}`;
         } else {
-            document.getElementById('extrasDetail').textContent = `Дополнительные услуги: не выбраны`;
+            document.getElementById('extrasDetail').textContent = `Дополнительные услуги: Не выбраны`;
         }
 
         // Отображаем итоговую цену
-        document.getElementById('totalPrice').textContent = `Итого: ${totalPrice} руб `;
+        document.getElementById('totalPrice').textContent = `Итого: ${totalPrice} руб`;
         document.getElementById('priceNote').textContent = priceNote;
 
         // Показываем кнопку для оплаты
@@ -938,26 +934,26 @@
     function proceedToPayment() {
         const totalElement = document.getElementById('totalPrice');
         const totalText = totalElement.textContent;
-        const totalAmount = totalText.match(/\(\d+)/)[1];
-
-        // Здесь можно добавить интеграцию с платежной системой
-        // Пока что просто покажем alert с деталями
-        alert(`Thank you for your order!\n\nTotal amount: $${totalAmount}\n\nYou will be redirected to the payment page.`);
-
-        // В реальном проекте здесь будет редирект на страницу оплаты
-        // window.location.href = `/payment?amount=${totalAmount}`;
+        
+        // Ищем числа в тексте (например: "Итого: 1500 руб")
+        const match = totalText.match(/(\d+)/);
+        
+        if (match) {
+            const totalAmount = match[0];
+            alert(`Спасибо за ваш заказ!\n\nОбщая сумма: ${totalAmount} руб\n\nВы будете перенаправлены на страницу оплаты.`);
+        } else {
+            alert('Не удалось определить сумму заказа');
+        }
     }
 
     // Автоматический пересчет при изменении значений
     document.addEventListener('DOMContentLoaded', function () {
-        // Добавляем обработчики событий для автоматического пересчета
         const inputs = ['membershipType', 'trainingType', 'lockerRental', 'towelService', 'months'];
 
         inputs.forEach(inputId => {
             const element = document.getElementById(inputId);
             if (element) {
                 element.addEventListener('change', function () {
-                    // Пересчитываем только если уже была нажата кнопка расчета
                     if (document.getElementById('proceedBtn').style.display === 'block') {
                         calculateTotal();
                     }
