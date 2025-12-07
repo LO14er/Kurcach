@@ -844,7 +844,7 @@
         .classList.toggle("menu_btn-style");
     }
   </script>
-  <script>
+ <script>
     function calculateTotal() {
         // Получаем значения из формы
         const membershipType = document.getElementById('membershipType');
@@ -853,7 +853,7 @@
         const towelService = document.getElementById('towelService');
         const months = document.getElementById('months');
 
-        // Проверяем, выбран ли тип членства
+        // Проверяем, выбран ли тип абонемента
         if (!membershipType.value) {
             alert('Сначала выберите абонемент!');
             membershipType.focus();
@@ -878,7 +878,7 @@
 
         if (towelService.checked) {
             extrasPrice += parseInt(towelService.value);
-            extrasText.push('Полотенце');
+            extrasText.push('Полотенца');
         }
 
         // Определяем тип плана
@@ -886,8 +886,8 @@
         let isSubscription = true;
         let monthsCount = 1;
 
-        // Разовое посещение
-        if (membershipValue === '100') {
+        // Разовое посещение (1300 руб)
+        if (membershipValue === '1300') {
             isSubscription = false;
             trainingPrice = 0;
             extrasPrice = 0;
@@ -922,7 +922,7 @@
         }
 
         // Отображаем итоговую цену
-        document.getElementById('totalPrice').textContent = `Итого: ${totalPrice} руб`;
+        document.getElementById('totalPrice').textContent = `Итого: ${totalPrice} рублей`;
         document.getElementById('priceNote').textContent = priceNote;
 
         // Показываем кнопку для оплаты
@@ -932,23 +932,21 @@
         document.querySelector('.result_box').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Функция для перехода к оплате
     function proceedToPayment() {
         const totalElement = document.getElementById('totalPrice');
         const totalText = totalElement.textContent;
         
-        // Ищем числа в тексте (например: "Итого: 1500 руб")
+        // Ищем числа в тексте
         const match = totalText.match(/(\d+)/);
         
         if (match) {
             const totalAmount = match[0];
-            alert(`Спасибо за ваш заказ!\n\nОбщая сумма: ${totalAmount} руб\n\nВы будете перенаправлены на страницу оплаты.`);
+            alert(`Спасибо за ваш заказ!\n\nОбщая сумма: ${totalAmount} рублей\n\nВы будете перенаправлены на страницу оплаты.`);
         } else {
             alert('Не удалось определить сумму заказа');
         }
     }
 
-    // Автоматический пересчет при изменении значений
     document.addEventListener('DOMContentLoaded', function () {
         const inputs = ['membershipType', 'trainingType', 'lockerRental', 'towelService', 'months'];
 
@@ -963,10 +961,10 @@
             }
         });
 
-        // Скрываем поле месяцев для разового посещения
+        // Скрываем поле месяцев для разового посещения (1300 руб)
         document.getElementById('membershipType').addEventListener('change', function () {
             const monthsField = document.getElementById('months').parentElement;
-            if (this.value === '100') {
+            if (this.value === '1300') {
                 monthsField.style.display = 'none';
             } else {
                 monthsField.style.display = 'block';
