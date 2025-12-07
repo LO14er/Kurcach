@@ -365,84 +365,86 @@
 
   <!-- end us section -->
  <!-- price calculator section -->
- <section class="calculator_section layout_padding">
-     <div class="container">
-         <div class="heading_container">
-             <h2>
-                 Записаться на тренировку
-             </h2>
-         </div>
-         <div class="calculator_container">
-             <div class="row">
-                 <div class="col-md-6">
-                     <form id="gymCalculator">
-                         <div class="form-group">
-                             <label for="Абонимент">Абонимент</label>
-                             <select class="form-control" id="membershipType" required>
-                                 <option value="" disabled selected>Выбрать абонимент</option>
-                                 <option value="1300">Разовое посещение -1300 рублей</option>
-                                 <option value="3000">Месячная обычная- 3000 рублей</option>
-                                 <option value="5000">месячная (премиум)-5000 рублей</option>
-                                 <option value="20000">Годовая обычная-20000 рублей</option>
-                                 <option value="45000">Годовая премиум-45000 рублей</option>
-                             </select>
-                         </div>
+ <!-- price calculator section -->
+<section class="calculator_section layout_padding" id="calculator">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Записаться на тренировку
+            </h2>
+        </div>
+        <div class="calculator_container">
+            <div class="row">
+                <div class="col-md-6">
+                    <form id="gymCalculator">
+                        <div class="form-group">
+                            <label for="membershipType">Абонемент</label> <!-- ID изменен -->
+                            <select class="form-control" id="membershipType" required> <!-- ID изменен -->
+                                <option value="" disabled selected>Выбрать абонемент</option>
+                                <option value="1300">Разовое посещение - 1300 рублей</option>
+                                <option value="3000">Месячная обычная - 3000 рублей</option>
+                                <option value="5000">Месячная (премиум) - 5000 рублей</option>
+                                <option value="20000">Годовая обычная - 20000 рублей</option>
+                                <option value="45000">Годовая премиум - 45000 рублей</option>
+                            </select>
+                        </div>
 
-                         <div class="form-group">
-                             <label for="trainingType">Персональные тренировки:</label>
-                             <select class="form-control" id="trainingType">
-                                 <option value="0">не персональные тренировки</option>
-                                 <option value="6000">5 занятий- 6000рублей/месяц</option>
-                                 <option value="15000">10 занятий-15000</option>
-                                 <option value="40000">безлимит-40000</option>
-                             </select>
-                         </div>
+                        <div class="form-group">
+                            <label for="trainingType">Персональные тренировки:</label>
+                            <select class="form-control" id="trainingType">
+                                <option value="0">Без персональных тренировок</option>
+                                <option value="6000">5 занятий - 6000 рублей/месяц</option>
+                                <option value="15000">10 занятий - 15000 рублей</option>
+                                <option value="40000">Безлимит - 40000 рублей</option>
+                            </select>
+                        </div>
 
-                         <div class="form-check">
-                             <input class="form-check-input" type="checkbox" id="lockerRental" value="500">
-                             <label class="form-check-label" for="lockerRental">
-                                 Аренда шкафчика- 500 рублей/месяц
-                             </label>
-                         </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="lockerRental" value="500">
+                            <label class="form-check-label" for="lockerRental">
+                                Аренда шкафчика - 500 рублей/месяц
+                            </label>
+                        </div>
 
-                         <div class="form-check">
-                             <input class="form-check-input" type="checkbox" id="towelService" value="300">
-                             <label class="form-check-label" for="towelService">
-                                 полотенца-300 рублей/месяц
-                             </label>
-                         </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="towelService" value="300">
+                            <label class="form-check-label" for="towelService">
+                                Полотенца - 300 рублей/месяц
+                            </label>
+                        </div>
 
-                         <div class="form-group mt-4">
-                             <label for="months">Количество месяцев (для ежемесячных планов):</label>
-                             <input type="number" class="form-control" id="months" min="1" max="12" value="1">
-                         </div>
+                        <div class="form-group mt-4">
+                            <label for="months">Количество месяцев (для ежемесячных планов):</label>
+                            <input type="number" class="form-control" id="months" min="1" max="12" value="1">
+                        </div>
 
-                         <button type="button" class="btn btn-primary mt-3" onclick="calculateTotal()">
-                             Итого:
-                         </button>
-                     </form>
-                 </div>
+                        <button type="button" class="btn btn-primary mt-3" onclick="calculateTotal()">
+                            Рассчитать сумму
+                        </button>
+                    </form>
+                </div>
 
-                 <div class="col-md-6">
-                     <div class="result_box">
-                         <h4>Информация</h4>
-                         <div class="result_display">
-                             <p id="membershipDetail">Абонимент: не выбрано</p>
-                             <p id="trainingDetail">Персонально: не выбрано</p>
-                             <p id="extrasDetail">Дополнительные услуги:не выбрано</p>
-                             <hr>
-                             <h3 id="totalPrice">Итого: 0 рублей</h3>
-                             <p id="priceNote" class="text-muted"></p>
-                         </div>
-                         <button type="button" class="btn btn-success mt-3" id="proceedBtn" style="display:none;" onclick="proceedToPayment()">
-                             Перейти к оплате
-                         </button>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
- </section>
+                <div class="col-md-6">
+                    <div class="result_box">
+                        <h4>Информация о заказе</h4>
+                        <div class="result_display">
+                            <p id="membershipDetail">Абонемент: не выбрано</p>
+                            <p id="trainingDetail">Персональные тренировки: не выбрано</p>
+                            <p id="extrasDetail">Дополнительные услуги: не выбрано</p>
+                            <hr>
+                            <h3 id="totalPrice">Итого: 0 рублей</h3>
+                            <p id="priceNote" class="text-muted"></p>
+                        </div>
+                        <button type="button" class="btn btn-success mt-3" id="proceedBtn" style="display:none;" onclick="proceedToPayment()">
+                            Перейти к оплате
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- end price calculator section -->
  <!-- end price calculator section -->
 
   <!-- client section -->
